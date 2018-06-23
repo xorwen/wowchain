@@ -11,5 +11,5 @@ def chatbot_callback():
 @app.route('/api/chatfuel/gencode', methods=['GET', 'POST'])
 def chatfuel_gencode():
     if not request.json:
-        print("not a json")
-    print(request.json)
+        return "not a json"
+    return repr(request.json)
