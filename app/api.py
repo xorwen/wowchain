@@ -80,7 +80,8 @@ def validate_engaging_token():
               "found_match": "true",
               "partner_id": str(partner_id[0])
             },
-          "type": "json_plugin_url",
+          "block_names": ["Block 1"],
+          "type": "show_block",
           "messages": "Success :)",
         }
     else:
