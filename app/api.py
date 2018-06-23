@@ -5,6 +5,7 @@ import requests
 from flask import Flask, jsonify, request
 import config
 import urllib.parse
+import json
 
 app = Flask(__name__)
 
@@ -91,6 +92,6 @@ def validate_engaging_token():
         }
 
     print(response)
-    print(jsonify(response))
+    print(json.dumps(response))
 
     return jsonify(response)
