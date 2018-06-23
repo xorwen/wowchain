@@ -77,11 +77,10 @@ def validate_engaging_token():
           "set_attributes":
             {
               "found_match": "true",
-              "partner_id": repr(partner_id[0])
+              "partner_id": partner_id[0]
             },
           "messages": "Success :)",
         }
-        print("Success")
     else:
         response = {
             "set_attributes":
@@ -90,6 +89,8 @@ def validate_engaging_token():
                 },
             "messages": "Not found.",
         }
-        print("Not found.")
+
+    print(response)
+    print(jsonify(response))
 
     return jsonify(response)
