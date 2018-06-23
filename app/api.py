@@ -54,12 +54,13 @@ def gencode():
     r.set(f'engaging_token_{engaging_token}', received['chatfuel user id'][0])
 
     response = {
-         "messages": [
-           {"text": "This is your secret code you need to send your partner:"},
-           {"text": engaging_token}
-         ]
+        "set_attributes":
+            {
+                "engaging_token": engaging_token
+            }
     }
-    print("chatfuel_gencode response sent")
+
+    print("engaging_token response sent")
     return jsonify(response)
 
 
