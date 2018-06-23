@@ -70,21 +70,26 @@ def validate_engaging_token():
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
     partner_id = r.get(f"engaging_token_{engaging_token}")
+    print(f"Id of matched partner is {partner_id}")
 
     if partner_id:
         response = {
-             "messages": [
-               {"text": "Cool! You have a match :)"},
-               {"text": partner_id[0]}
-             ]
+          "set_attributes":
+            {
+              "found_match": "true",
+              "partner_id": repr(partner_id)
+            },
+          "messages": "Success :)",
         }
-        print("Cool! You have a match :)")
+        print("Success")
     else:
         response = {
-            "messages": [
-                {"text": "Sorry."},
-            ]
+            "set_attributes":
+                {
+                    "found_match": "false"
+                },
+            "messages": "Not found.",
         }
-        print("Sorry")
+        print("Not found.")
 
     return jsonify(response)
