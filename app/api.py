@@ -10,5 +10,5 @@ def chatbot_callback():
 
 @app.route('/api/chatfuel/gencode', methods=['GET'])
 def chatfuel_gencode():
-    print(jsonify(request.args))
+    print("Received message", jsonify(request.args))
     return jsonify(request.args)
