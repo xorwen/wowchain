@@ -69,6 +69,7 @@ def validate_engaging_token():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
     engaging_token = received['engaging_token'][0]
+    user_id = received['chatfuel user id'][0]
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
     partner_id = r.get(f"engaging_token_{engaging_token}")
@@ -78,6 +79,8 @@ def validate_engaging_token():
     print(f"Id of matched partner is {partner_id} type {type(partner_id)}")
 
     if partner_id:
+        r.set(f'engaged_{engaging_token}', f"{partner_id}-{user_id}")
+
         response = {
           "set_attributes":
             {
