@@ -12,6 +12,7 @@ def chatbot_callback():
 def chatfuel_gencode():
     if not request.json:
         print("received no json")
-        return jsonify({"error": "not a json"})
+        print(request.get_data(as_text=True))
+        return jsonify({})
     print("Received this json", request.json)
     return jsonify(request.json)
