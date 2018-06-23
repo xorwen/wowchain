@@ -75,7 +75,7 @@ def validate_engaging_token():
         response = {
              "messages": [
                {"text": "Cool! You have a match :)"},
-               {"text": partner_id}
+               {"text": partner_id[0]}
              ]
         }
         print("Cool! You have a match :)")
