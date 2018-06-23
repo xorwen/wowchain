@@ -80,6 +80,7 @@ def validate_engaging_token():
               "found_match": "true",
               "partner_id": str(partner_id[0])
             },
+          "type": "json_plugin_url",
           "messages": "Success :)",
         }
     else:
