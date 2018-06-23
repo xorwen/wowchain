@@ -82,7 +82,7 @@ def validate_engaging_token():
             },
           "block_names": ["Block 1"],
           "type": "show_block",
-          "messages": "Success :)",
+          "title": "Go!",
         }
     else:
         response = {
