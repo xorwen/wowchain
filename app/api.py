@@ -79,20 +79,14 @@ def validate_engaging_token():
             {
               "found_match": "true",
               "partner_id": str(partner_id[0])
-            },
-          "block_names": ["api_validate_engaging_token"],
-          "type": "show_block",
-          "title": "Go!",
+            }
         }
     else:
         response = {
             "set_attributes":
                 {
-                    "found_match": "false",
-                },
-            "block_names": ["api_validate_engaging_token"],
-            "type": "show_block",
-            "title": "Go!",
+                    "found_match": "false"
+                }
         }
 
     print(response)
