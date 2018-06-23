@@ -80,7 +80,7 @@ def validate_engaging_token():
               "found_match": "true",
               "partner_id": str(partner_id[0])
             },
-          "block_names": ["Block 1"],
+          "block_names": ["api_validate_engaging_token"],
           "type": "show_block",
           "title": "Go!",
         }
