@@ -12,4 +12,4 @@ def chatbot_callback():
 def chatfuel_gencode():
     if not request.json:
         return jsonify({"error": "not a json"})
-    return request.text
+    return jsonify(request.json)
