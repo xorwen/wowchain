@@ -57,4 +57,5 @@ def chatfuel_gencode():
            {"text": person_secret}
          ]
     }
+    print("chatfuel_gencode response sent")
     return jsonify(response)
