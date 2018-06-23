@@ -71,14 +71,17 @@ def validate_engaging_token():
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
     partner_id = r.get(f"engaging_token_{engaging_token}")
-    print(f"Id of matched partner is {partner_id}")
+    print(f"Found partner_id {partner_id} type {type(partner_id)}")
+    if partner_id:
+        partner_id = partner_id.decode('ascii')
+    print(f"Id of matched partner is {partner_id} type {type(partner_id)}")
 
     if partner_id:
         response = {
           "set_attributes":
             {
               "found_match": "true",
-              "partner_id": str(partner_id[0])
+              "partner_id": partner_id
             }
         }
     else:
