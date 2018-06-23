@@ -17,7 +17,7 @@ blocks = {
 def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
-5
+
 def broadcast(block_name, attributes=None):
     payload = {
         'chatfuel_token': config.chatfuel_token,
@@ -43,13 +43,14 @@ def chatbot_callback():
 
 
 @app.route('/api/gencode', methods=['GET'])
-def chatfuel_gencode():
+def gencode():
     print("Received message", request.args)
-
-    user_name = request.args.get("first_name", 'noname')
+    received = request.args.to_dict(flat=False)
 
     person_secret = get_random_string()
-    r.set(f'person_secret_{person_secret}', user_name)
+
+    print("Store to redis", f'person_secret_{person_secret}', received['chatfuel user id'])
+    r.set(f'person_secret_{person_secret}', received['chatfuel user id'])
 
     response = {
          "messages": [
