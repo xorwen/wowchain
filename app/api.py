@@ -88,9 +88,11 @@ def validate_engaging_token():
         response = {
             "set_attributes":
                 {
-                    "found_match": "false"
+                    "found_match": "false",
                 },
-            "messages": "Not found.",
+            "block_names": ["api_validate_engaging_token"],
+            "type": "show_block",
+            "title": "Go!",
         }
 
     print(response)
