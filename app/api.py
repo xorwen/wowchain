@@ -77,7 +77,7 @@ def validate_engaging_token():
           "set_attributes":
             {
               "found_match": "true",
-              "partner_id": repr(partner_id)
+              "partner_id": repr(partner_id[0])
             },
           "messages": "Success :)",
         }
