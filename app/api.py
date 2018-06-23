@@ -8,11 +8,6 @@ def chatbot_callback():
     return jsonify({"pong": a})
 
 
-@app.route('/api/chatfuel/gencode', methods=['GET', 'POST'])
+@app.route('/api/chatfuel/gencode', methods=['GET'])
 def chatfuel_gencode():
-    if not request.json:
-        print("received no json")
-        print(request.get_data(as_text=True))
-        return jsonify({})
-    print("Received this json", request.json)
-    return jsonify(request.json)
+    return jsonify(request.args)
