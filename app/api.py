@@ -42,21 +42,49 @@ def chatbot_callback():
     return jsonify({"pong": a})
 
 
-@app.route('/api/gencode', methods=['GET'])
+@app.route('/api/generate_engaging_token', methods=['GET'])
 def gencode():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
 
-    person_secret = get_random_string()
+    engaging_token = get_random_string()
 
-    print("Store to redis", f'person_secret_{person_secret}', received['chatfuel user id'])
-    r.set(f'person_secret_{person_secret}', received['chatfuel user id'])
+    print("Store to redis", f'person_secret_{engaging_token}', received['chatfuel user id'])
+    r.set(f'person_secret_{engaging_token}', received['chatfuel user id'][0])
 
     response = {
          "messages": [
            {"text": "This is your secret code you need to send your partner:"},
-           {"text": person_secret}
+           {"text": engaging_token}
          ]
     }
     print("chatfuel_gencode response sent")
+    return jsonify(response)
+
+
+@app.route('/api/validate_engaging_token', methods=['GET'])
+def validate_engaging_token():
+    print("Received message", request.args)
+    received = request.args.to_dict(flat=False)
+    engaging_token = received['engaging_token']
+
+    print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
+    partner_id = r.get(f"person_secret_{engaging_token}")
+
+    if partner_id:
+        response = {
+             "messages": [
+               {"text": "Cool! You have a match :)"},
+               {"text": partner_id}
+             ]
+        }
+        print("Cool! You have a match :)")
+    else:
+        response = {
+            "messages": [
+                {"text": "Sorry."},
+            ]
+        }
+        print("Sorry")
+
     return jsonify(response)
