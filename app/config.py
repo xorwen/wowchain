@@ -1,0 +1,3 @@
+
+chatfuel_bot_id = '5b2e4707e4b08d708ad538ce'
+chatfuel_token = 'mELtlMAHYqR0BvgEiMq8zVek3uYUK3OJMbtyrdNPTrQB9ndV0fM7lWTFZbM4MZvD'
