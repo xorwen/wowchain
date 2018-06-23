@@ -50,7 +50,7 @@ def gencode():
     engaging_token = get_random_string()
 
     print("Store to redis", f'person_secret_{engaging_token}', received['chatfuel user id'])
-    r.set(f'person_secret_{engaging_token}', received['chatfuel user id'][0])
+    r.set(f'engaging_token_{engaging_token}', received['chatfuel user id'][0])
 
     response = {
          "messages": [
@@ -69,7 +69,7 @@ def validate_engaging_token():
     engaging_token = received['engaging_token']
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
-    partner_id = r.get(f"person_secret_{engaging_token}")
+    partner_id = r.get(f"engaging_token_{engaging_token}")
 
     if partner_id:
         response = {
