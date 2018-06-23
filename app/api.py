@@ -66,7 +66,7 @@ def gencode():
 def validate_engaging_token():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
-    engaging_token = received['engaging_token']
+    engaging_token = received['engaging_token'][0]
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
     partner_id = r.get(f"engaging_token_{engaging_token}")
