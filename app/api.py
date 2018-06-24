@@ -214,6 +214,7 @@ def final_yes():
     engagement_token = r.get(f"gettoken_{user_id}").decode('ascii')
     my_name  = f"{received['first name'][0]} {received['last name'][0]}"
     partner_name = get_my_partner_name(user_id)
+    print(f"user_id {user_id},  engagement_token {engagement_token}, my_name {my_name}, partner_name {partner_name} ")
     store_to_blockchain(engagement_token, name_a=my_name, name_b=partner_name)
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
