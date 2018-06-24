@@ -101,11 +101,13 @@ def calculate_agreement(agr_a, agr_b):
      'commitment_indefinite']
 
     for k in binary_keys:
-        print(f"Comparing {agr_a.get(k)} with {agr_b.get(k)}...")
+        print(f"Comparing '{agr_a.get(k)}' with '{agr_b.get(k)}'...")
         if agr_a.get(k) == 'I do' and agr_b.get(k) == 'I do':
             agr_c[k] = "I don't"
+            print("true")
         else:
             agr_c[k] = "I don't"
+            print("false")
 
     agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999)))
     print(agr_c)
