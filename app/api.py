@@ -68,16 +68,6 @@ def test_marrige():
     return jsonify({"ok": 1})
 
 
-@app.route('/static_file/<path:path>')
-def send_static(path):
-    print("Sending static file ", path)
-
-    if not path.endswith(".png"):
-        abort(404)
-
-    return send_from_directory("../temp_files/", path)
-
-
 
 @app.route('/api/eth_callback/<eng_key>')
 def eth_callback(eng_key):
