@@ -200,8 +200,8 @@ def send_static(path):
 @app.route('/api/final_yes', methods=['GET'])
 def final_yes():
     received = request.args.to_dict(flat=False)
-    user_id = received['chatfuel user id'][0]
-    engagement_token = r.get(f"gettoken_{user_id}")
+    user_id = received['chatfuel user id'][0] # b'MSHM8W'
+    engagement_token = str(r.get(f"gettoken_{user_id}"))[2:-1]
     my_name  = f"{received['first name'][0]} {received['last name'][0]}"
     partner_name = get_my_partner_name(user_id)
     print(f"user_id {user_id},  engagement_token {engagement_token}, my_name {my_name}, partner_name {partner_name} ")
