@@ -117,7 +117,7 @@ def load_aggrements_params():
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
     engagement_token = r.get(user_id)
-    partner_id = r.get(f"partner_{user_id}")
+    partner_id = r.get(f"partner_{user_id}").decode('ascii')
     print(f"engagement_token: {engagement_token}")
 
     params = {}
@@ -131,17 +131,21 @@ def load_aggrements_params():
     r.set(f'commitment_{user_id}>{partner_id}', json.dumps(params))
 
     if r.get(f'commitment_{partner_id}>{user_id}'):
+        print("Found partner and calculating.")
         agr = calculate_agreement(
             r.get(f'commitment_{user_id}>{partner_id}'),
             r.get(f'commitment_{partner_id}>{user_id}')
         )
+        print("Storing commitment_{engagement_token} to redis")
         r.set(f'commitment_{engagement_token}', json.dumps(agr))
+        print("Broadcasting to partner.")
         broadcast_agreement(agr, partner_id)
 
         response = {
             "set_attributes": agr
         }
     else:
+        print("Stored and witing for partner to answer.")
         response = {
             "set_attributes": {}
         }
