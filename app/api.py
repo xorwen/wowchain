@@ -100,12 +100,12 @@ def calculate_agreement(agr_a, agr_b):
     binary_keys = ['commitment_final_response',
      'commitment_medial_records', 'commitment_hapiness', 'commitment_sexual_exclusivity',
      'commitment_indefinite']
+
     for k in binary_keys:
         if agr_a[k] == 'I do' and agr_b[k] == 'I do':
             agr_c = "I don't"
         else:
             agr_c = "I don't"
-
 
     agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999)))
 
@@ -128,13 +128,13 @@ def load_aggrements_params():
         if key in received:
             params[key] = received[key][0]
 
-    r.set(f'commitment_{user_id}>{partner_id}', json.dumps(params))
+    r.set(f'commitment_{user_id}>{partner_id}', pickle.dumps(params))
 
     if r.get(f'commitment_{partner_id}>{user_id}'):
         print("Found partner and calculating.")
         agr = calculate_agreement(
-            r.get(f'commitment_{user_id}>{partner_id}'),
-            r.get(f'commitment_{partner_id}>{user_id}')
+            pickle.loads(r.get(f'commitment_{user_id}>{partner_id}')),
+            pickle.loads(r.get(f'commitment_{partner_id}>{user_id}'))
         )
         print("Storing commitment_{engagement_token} to redis")
         r.set(f'commitment_{engagement_token}', json.dumps(agr))
