@@ -7,6 +7,7 @@ import config
 import urllib.parse
 import json
 import subprocess
+import time
 import pickle
 
 app = Flask(__name__)
@@ -37,6 +38,7 @@ def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
 
 
 def broadcast(user_id, block_name, attributes=None):
+    time.sleep(1)
     payload = {
         'chatfuel_token': config.chatfuel_token,
         'chatfuel_block_id': blocks[block_name],
@@ -245,6 +247,7 @@ def validate_engaging_token():
         r.set(f'gettoken_{user_id}', engaging_token)
 
         async_broadcast(partner_id, f"You have just been engaged with {user_name}", 'group_ready')
+        time.sleep(1)
         async_broadcast(user_id, f"You have just been engaged with {get_my_partner_name(user_id)}", 'group_ready')
     else:
         response = {
