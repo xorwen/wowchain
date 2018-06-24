@@ -28,6 +28,7 @@ def store_to_blockchain(token, name_a, name_b):
     ]
     subprocess.Popen(command)
 
+
 def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
@@ -167,6 +168,17 @@ def send_static(path):
         abort(404)
 
     return send_from_directory("../temp_files/", path)
+
+
+
+@app.route('/api/eth_callback/<eng_key>')
+def eth_callback(eng_key):
+
+    print("ETH callback ", eng_key)
+
+    return jsonify({
+        "eng_key": eng_key
+    })
 
 
 @app.route('/api/final_yes', methods=['GET'])
