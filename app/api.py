@@ -177,7 +177,12 @@ def eth_callback(eng_key):
     print("ETH callback ", eng_key)
 
     return jsonify({
-        "eng_key": eng_key
+        "eng_key": eng_key,
+        "images": [
+            "http://46.101.117.31:5000/static_file/cert_" + eng_key + ".png",
+            "http://46.101.117.31:5000/static_file/power_of_a_" + eng_key + ".png",
+            "http://46.101.117.31:5000/static_file/power_of_b_" + eng_key + ".png",
+        ]
     })
 
 
