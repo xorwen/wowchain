@@ -22,10 +22,8 @@ def store_to_blockchain(token, name_a, name_b):
     out = f'./assets/{contract_id}-'
     command = [
         "python3", "run_blockchain.py",
-        "./files/MarriageContract.sol", "./files/power_of.png", f"{out}power_of_OUT.png",
-        "./files/Merriweather-Bold.ttf",
         name_a, name_b,
-        "./files/cert.png", f"{out}cert_OUT.png", f"{out}out.png",
+        token,
         contract_id
     ]
     subprocess.Popen(command)
@@ -103,6 +101,7 @@ def calculate_agreement(agr_a, agr_b):
      'commitment_indefinite']
 
     for k in binary_keys:
+        print(f"Comparing {agr_a.get(k)} with {agr_b.get(k)}...")
         if agr_a.get(k) == 'I do' and agr_b.get(k) == 'I do':
             agr_c[k] = "I don't"
         else:
@@ -127,6 +126,7 @@ def load_aggrements_params():
             'commitment_indefinite']
     for key in keys:
         if key in received:
+            print(f"(setting)> {key}\t{received[key][0]}")
             params[key] = received[key][0]
 
     r.set(f'commitment_{user_id}>{partner_id}', pickle.dumps(params))
@@ -142,8 +142,12 @@ def load_aggrements_params():
         print("Broadcasting to partner.")
         broadcast_agreement(agr, partner_id)
 
+        final = {}
+        for k, v in agr.items():
+            final[f"conj_{k}"] = v
+
         response = {
-            "set_attributes": agr
+            "set_attributes": final
         }
     else:
         print("Stored and witing for partner to answer.")
