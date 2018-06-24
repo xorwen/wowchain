@@ -107,7 +107,7 @@ def calculate_agreement(agr_a, agr_b):
             agr_c = "I don't"
 
 
-    agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999))
+    agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999)))
 
     return agr_c
 
