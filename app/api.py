@@ -35,7 +35,7 @@ def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
 def broadcast(user_id, block_name, attributes=None):
     payload = {
         'chatfuel_token': config.chatfuel_token,
-        'chatfuel_block_id': blocks[block_name],
+        #'chatfuel_block_id': blocks[block_name],
     }
 
     if attributes:
