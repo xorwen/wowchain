@@ -48,6 +48,9 @@ def broadcast(user_id, block_name, attributes=None):
     resp = requests.post(f'https://api.chatfuel.com/bots/{bot_id}/users/{user_id}/send?{param_str}')
     print(resp.json())
 
+def broadcast_agreement(agr, partner_id):
+    broadcast(partner_id, 'api_generic_message', attributes=agr)
+
 def async_broadcast(user_id, message):
     subprocess.Popen(["python3", "broadcast.py", user_id, message])
 
@@ -92,27 +95,58 @@ def get_my_partner_name(my_id):
     return partner_name
 
 
-@app.route('/api/get_final_yes', methods=['GET'])
+def calculate_agreement(agr_a, agr_b):
+    agr_c = {}
+    binary_keys = ['commitment_final_response',
+     'commitment_medial_records', 'commitment_hapiness', 'commitment_sexual_exclusivity',
+     'commitment_indefinite']
+    for k in binary_keys:
+        if agr_a[k] == 'I do' and agr_b[k] == 'I do':
+            agr_c = "I don't"
+        else:
+            agr_c = "I don't"
+
+
+    agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999))
+
+    return agr_c
+
+@app.route('/api/load_aggrements_params', methods=['GET'])
 def load_aggrements_params():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
     engagement_token = r.get(user_id)
+    partner_id = r.get(f"partner_{user_id}")
     print(f"engagement_token: {engagement_token}")
 
     params = {}
-    keys = ['xx', 'yy']
+    keys = ['commitment_final_response', 'commitment_duration',
+            'commitment_medial_records','commitment_hapiness','commitment_sexual_exclusivity',
+            'commitment_indefinite']
     for key in keys:
         if key in received:
             params[key] = received[key][0]
 
-    print(params)
+    r.set(f'commitment_{user_id}>{partner_id}', json.dumps(params))
 
-    partner_name = get_my_partner_name(user_id)
-    user_name = f"{received['first name'][0]} {received['last name'][0]}"
+    if r.get(f'commitment_{partner_id}>{user_id}'):
+        agr = calculate_agreement(
+            r.get(f'commitment_{user_id}>{partner_id}'),
+            r.get(f'commitment_{partner_id}>{user_id}')
+        )
+        r.set(f'commitment_{engagement_token}', json.dumps(agr))
+        broadcast_agreement(agr, partner_id)
 
-    print("Storing to blockchain")
-    store_to_blockchain(engagement_token, name_a=user_name, name_b=partner_name)
+        response = {
+            "set_attributes": agr
+        }
+    else:
+        response = {
+            "set_attributes": {}
+        }
+
+    #store_to_blockchain(engagement_token, name_a=user_name, name_b=partner_name)
     return jsonify(params)
 
 
