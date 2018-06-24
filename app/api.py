@@ -39,10 +39,12 @@ def async_broadcast(user_id, message):
     subprocess.Popen(["python3", "broadcast.py", user_id, message])
 
 
-@app.route('/api/ping')
+@app.route('/api/test_broadcast')
 def chatbot_callback():
-    a = int(request.args.get('a', 0))
-    return jsonify({"pong": a})
+    user_id = request.args.get('user_id','')
+    print(f"Broadcasting test mesage to {user_id}")
+    async_broadcast(user_id, "test broadcast message")
+    return jsonify({"ok": 1})
 
 
 @app.route('/api/generate_engaging_token', methods=['GET'])
