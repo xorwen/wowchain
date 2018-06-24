@@ -6,7 +6,7 @@ time.sleep(1)
 
 broadcast(
     user_id = sys.argv[1],
-    #block_name='api_generic_message',
+    block_name=sys.argv[3],
     attributes={'api_message_body':  sys.argv[2]}
 )
 
