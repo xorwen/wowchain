@@ -94,12 +94,14 @@ def eth_callback(eng_key):
         ]
     }
 
+    user_a, user_b = r.get("engaged_"+eng_key).split("-")
+
     for image in json_data["images"]:
 
         print("Sending image ", image)
 
-        # async_broadcast(partner_id_a, image)
-        # async_broadcast(partner_id_b, image)
+        async_broadcast(user_a, image)
+        async_broadcast(user_b, image)
 
     return jsonify(json_data)
 
