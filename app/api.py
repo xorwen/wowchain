@@ -18,13 +18,13 @@ blocks = {
 
 def store_to_blockchain():
     contract_id = 'xxx'
-    assets = f'./assets/{contract_id}-'
+    out = f'./assets/{contract_id}-'
     command = [
         "python3", "run_blockchain.py",
-        "./files/MarriageContract.sol", "./files/power_of.png", f"{assets}/power_of_OUT.png",
+        "./files/MarriageContract.sol", "./files/power_of.png", f"{out}power_of_OUT.png",
         "./files/Merriweather-Bold.ttf",
         "aa", "bb",
-        "./files/cert.png", f"{assets}/cert_OUT.png", f"{assets}/out.png"
+        "./files/cert.png", f"{out}cert_OUT.png", f"{out}out.png"
     ]
     subprocess.Popen(command)
 
