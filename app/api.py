@@ -14,7 +14,9 @@ app = Flask(__name__)
 r = redis.Redis(host='localhost', port=6379, db=0)
 
 blocks = {
-    'api_generic_message': '5b2e6e01e4b08d708b401776'
+    'api_generic_message': '5b2e6e01e4b08d708b401776',
+    'group_pending': '5b2f3e0ce4b08d708ce0a055',
+    'group_ready': '5b2f733de4b08d708d4edd6d'
 }
 
 def store_to_blockchain(token, name_a, name_b):
@@ -176,6 +178,7 @@ def validate_engaging_token():
     user_id = received['chatfuel user id'][0]
     user_name = f"{received['first name'][0]} {received['last name'][0]}"
 
+    print("User name is f{user_name}")
     r.set(f'username_{user_id}', user_name)
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
