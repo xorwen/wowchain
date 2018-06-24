@@ -6,6 +6,7 @@ from flask import Flask, jsonify, request
 import config
 import urllib.parse
 import json
+import subprocess
 
 app = Flask(__name__)
 
@@ -19,7 +20,7 @@ def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
 
-def broadcast(block_name, attributes=None):
+def broadcast(user_id, block_name, attributes=None):
     payload = {
         'chatfuel_token': config.chatfuel_token,
         'chatfuel_block_id': blocks[block_name],
@@ -31,15 +32,16 @@ def broadcast(block_name, attributes=None):
     param_str = urllib.parse.urlencode(payload)
     print(payload)
     bot_id = config.chatfuel_bot_id
-    user_id = '884740308318001'
     resp = requests.post(f'https://api.chatfuel.com/bots/{bot_id}/users/{user_id}/send?{param_str}')
     print(resp.json())
+
+def async_broadcast(user_id, message):
+    subprocess.Popen(["python3", "broadcast.py", user_id, message])
 
 
 @app.route('/api/ping')
 def chatbot_callback():
     a = int(request.args.get('a', 0))
-    broadcast(block_name='api_generic_message', attributes={'api_message_body': 'this is a message body'})
     return jsonify({"pong": a})
 
 
@@ -49,9 +51,11 @@ def gencode():
     received = request.args.to_dict(flat=False)
 
     engaging_token = get_random_string()
+    user_id = received['chatfuel user id'][0]
 
     print("Store to redis", f'person_secret_{engaging_token}', received['chatfuel user id'])
-    r.set(f'engaging_token_{engaging_token}', received['chatfuel user id'][0])
+    r.set(f'engaging_token_{engaging_token}', user_id)
+    r.set(f'username_{user_id}', f"{received['first name'][0]} {received['last name'][0]}")
 
     response = {
         "set_attributes":
@@ -63,6 +67,12 @@ def gencode():
     print("engaging_token response sent")
     return jsonify(response)
 
+def get_my_partner_name(my_id):
+    partner_id = r.get(f"partner_{my_id}")
+    partner_name = r.get(f"username_{partner_id}")
+    return partner_name
+
+
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
 def validate_engaging_token():
@@ -70,6 +80,9 @@ def validate_engaging_token():
     received = request.args.to_dict(flat=False)
     engaging_token = received['engaging_token'][0]
     user_id = received['chatfuel user id'][0]
+    user_name = f"{received['first name'][0]} {received['last name'][0]}"
+
+    r.set(f'username_{user_id}', user_name)
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
     partner_id = r.get(f"engaging_token_{engaging_token}")
@@ -79,8 +92,6 @@ def validate_engaging_token():
     print(f"Id of matched partner is {partner_id} type {type(partner_id)}")
 
     if partner_id:
-        r.set(f'engaged_{engaging_token}', f"{partner_id}-{user_id}")
-
         response = {
           "set_attributes":
             {
@@ -88,6 +99,12 @@ def validate_engaging_token():
               "partner_id": partner_id
             }
         }
+        r.set(f'engaged_{engaging_token}', f"{partner_id}-{user_id}")
+        r.set(f'partner_{partner_id}', user_id)
+        r.set(f'partner_{user_id}', partner_id)
+
+        async_broadcast(partner_id, f"Prave jsi byl zasoubeny s {user_name}")
+        async_broadcast(user_id, f"Prave jsi byl zasoubeny s {get_my_partner_name(user_id)}")
     else:
         response = {
             "set_attributes":
