@@ -88,12 +88,8 @@ def eth_callback(eng_key):
 
     user_a, user_b = str(r.get("engaged_"+eng_key).decode('ascii')).split("-")
 
-    for image in json_data["images"]:
-
-        print("Sending image ", image)
-
-        async_broadcast(user_a, image, 'smart_contract')
-        async_broadcast(user_b, image, 'smart_contract')
+    async_broadcast(user_a, "", 'smart_contract')
+    async_broadcast(user_b, "", 'smart_contract')
 
     return jsonify(json_data)
 
