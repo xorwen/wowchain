@@ -86,7 +86,7 @@ def eth_callback(eng_key):
         ]
     }
 
-    user_a, user_b = r.get("engaged_"+eng_key).split("-")
+    user_a, user_b = str(r.get("engaged_"+eng_key).decode('ascii')).split("-")
 
     for image in json_data["images"]:
 
