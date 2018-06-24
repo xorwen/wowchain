@@ -19,7 +19,7 @@ blocks = {
     'group_ready': '5b2f733de4b08d708d4edd6d',
     'finalise_vow': '5b2f3e0ce4b08d708ce0a055',
     'final_yes': '5b2f4316e4b08d708ce8be5a',
-    'smart_contract': ''
+    'smart_contract': '5b2f79f7e4b08d708d5da209'
 }
 
 def store_to_blockchain(token, name_a, name_b):
@@ -92,8 +92,8 @@ def eth_callback(eng_key):
 
         print("Sending image ", image)
 
-        async_broadcast(user_a, image)
-        async_broadcast(user_b, image)
+        async_broadcast(user_a, image, 'smart_contract')
+        async_broadcast(user_b, image, 'smart_contract')
 
     return jsonify(json_data)
 
