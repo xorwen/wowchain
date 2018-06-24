@@ -103,7 +103,7 @@ def calculate_agreement(agr_a, agr_b):
      'commitment_indefinite']
 
     for k in binary_keys:
-        if agr_a[k] == 'I do' and agr_b[k] == 'I do':
+        if agr_a.get(k) == 'I do' and agr_b.get(k) == 'I do':
             agr_c = "I don't"
         else:
             agr_c = "I don't"
