@@ -98,7 +98,7 @@ def get_my_partner_name(my_id):
 
 def calculate_agreement(agr_a, agr_b):
     agr_c = {}
-    binary_keys = ['commitment_final_response',
+    binary_keys = [
      'commitment_medial_records', 'commitment_hapiness', 'commitment_sexual_exclusivity',
      'commitment_indefinite']
 
@@ -122,7 +122,7 @@ def load_aggrements_params():
     print(f"engagement_token: {engagement_token}")
 
     params = {}
-    keys = ['commitment_final_response', 'commitment_duration',
+    keys = ['commitment_duration',
             'commitment_medial_records','commitment_hapiness','commitment_sexual_exclusivity',
             'commitment_indefinite']
     for key in keys:
