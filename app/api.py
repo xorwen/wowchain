@@ -14,9 +14,7 @@ app = Flask(__name__)
 r = redis.Redis(host='localhost', port=6379, db=0)
 
 blocks = {
-    'group_pending': '5b2f72cfe4b08d708d4d9e9c',
-    'group_ready': '5b2f733de4b08d708d4edd6d',
-    'finalise_vow': '5b2f3e0ce4b08d708ce0a055'
+    'api_generic_message': '5b2e6e01e4b08d708b401776'
 }
 
 def store_to_blockchain(token, name_a, name_b):
@@ -38,7 +36,7 @@ def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
 def broadcast(user_id, block_name, attributes=None):
     payload = {
         'chatfuel_token': config.chatfuel_token,
-        'chatfuel_block_id': blocks[block_name],
+        #'chatfuel_block_id': blocks[block_name],
     }
 
     if attributes:
@@ -50,9 +48,11 @@ def broadcast(user_id, block_name, attributes=None):
     resp = requests.post(f'https://api.chatfuel.com/bots/{bot_id}/users/{user_id}/send?{param_str}')
     print(resp.json())
 
+def broadcast_agreement(agr, user_id):
+    broadcast(user_id, 'api_generic_message', attributes=agr)
 
-def async_broadcast(user_id, message, block):
-    subprocess.Popen(["python3", "broadcast.py", user_id, message, block])
+def async_broadcast(user_id, message):
+    subprocess.Popen(["python3", "broadcast.py", user_id, message])
 
 
 @app.route('/api/test_broadcast')
@@ -145,8 +145,8 @@ def load_aggrements_params():
         for k, v in agr.items():
             final[f"conj_{k}"] = v
 
-        broadcast(user_id, 'finalise_vow', attributes=final)
-        broadcast(partner_id, 'finalise_vow', attributes=final)
+        broadcast_agreement(final, partner_id)
+        broadcast_agreement(final, user_id)
 
         response = {
             "set_attributes": final
@@ -176,14 +176,23 @@ def eth_callback(eng_key):
 
     print("ETH callback ", eng_key)
 
-    return jsonify({
+    json_data = {
         "eng_key": eng_key,
         "images": [
             "http://46.101.117.31:5000/static_file/cert_" + eng_key + ".png",
             "http://46.101.117.31:5000/static_file/power_of_a_" + eng_key + ".png",
             "http://46.101.117.31:5000/static_file/power_of_b_" + eng_key + ".png",
         ]
-    })
+    }
+
+    for image in json_data["images"]:
+
+        print("Sending image ", image)
+
+        # async_broadcast(partner_id_a, image)
+        # async_broadcast(partner_id_b, image)
+
+    return jsonify(json_data)
 
 
 @app.route('/api/final_yes', methods=['GET'])
@@ -203,7 +212,6 @@ def validate_engaging_token():
     user_id = received['chatfuel user id'][0]
     user_name = f"{received['first name'][0]} {received['last name'][0]}"
 
-    print("User name is f{user_name}")
     r.set(f'username_{user_id}', user_name)
 
     print("Getting from redis", engaging_token, "from user", received['chatfuel user id'])
@@ -227,8 +235,9 @@ def validate_engaging_token():
         r.set(f'gettoken_{partner_id}', engaging_token)
         r.set(f'gettoken_{user_id}', engaging_token)
 
-        async_broadcast(partner_id, f"Prave jsi byl zasoubeny s {user_name}", 'group_ready')
-        async_broadcast(user_id, f"Prave jsi byl zasoubeny s {get_my_partner_name(user_id)}", 'group_ready')
+        async_broadcast(partner_id, f"Excellent! You are now connected with {user_name}")
+        async_broadcast(user_id, f"Excellent! You are now connected with {get_my_partner_name(user_id)}")
+
     else:
         response = {
             "set_attributes":
