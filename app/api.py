@@ -117,7 +117,7 @@ def load_aggrements_params():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
-    engagement_token = r.get(f"gettoken_{user_id}")
+    engagement_token = r.get(f"gettoken_{user_id}").decode('ascii')
     partner_id = r.get(f"partner_{user_id}").decode('ascii')
     print(f"engagement_token: {engagement_token}")
 
