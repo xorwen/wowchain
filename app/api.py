@@ -68,6 +68,43 @@ def test_marrige():
     store_to_blockchain()
     return jsonify({"ok": 1})
 
+
+@app.route('/static_file/<path:path>')
+def send_static(path):
+    print("Sending static file ", path)
+
+    if not path.endswith(".png"):
+        abort(404)
+
+    return send_from_directory("../temp_files/", path)
+
+
+
+@app.route('/api/eth_callback/<eng_key>')
+def eth_callback(eng_key):
+
+    print("ETH callback ", eng_key)
+
+    json_data = {
+        "eng_key": eng_key,
+        "images": [
+            "http://46.101.117.31:5000/static_file/cert_" + eng_key + ".png",
+            "http://46.101.117.31:5000/static_file/power_of_a_" + eng_key + ".png",
+            "http://46.101.117.31:5000/static_file/power_of_b_" + eng_key + ".png",
+        ]
+    }
+
+    for image in json_data["images"]:
+
+        print("Sending image ", image)
+
+        # async_broadcast(partner_id_a, image)
+        # async_broadcast(partner_id_b, image)
+
+    return jsonify(json_data)
+
+
+
 @app.route('/api/generate_engaging_token', methods=['GET'])
 def gencode():
     print("Received message", request.args)
