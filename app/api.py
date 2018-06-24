@@ -3,7 +3,7 @@ import redis
 import string
 import requests
 from flask import Flask, jsonify, request, send_from_directory, abort
-# import config
+import config
 import urllib.parse
 import json
 import subprocess
@@ -27,8 +27,7 @@ def store_to_blockchain(token, name_a, name_b):
     command = [
         "python3", "run_blockchain.py",
         name_a, name_b,
-        token,
-        contract_id
+        token.decode('ascii')
     ]
     subprocess.Popen(command)
 
@@ -67,16 +66,6 @@ def chatbot_callback():
 def test_marrige():
     store_to_blockchain()
     return jsonify({"ok": 1})
-
-
-@app.route('/static_file/<path:path>')
-def send_static(path):
-    print("Sending static file ", path)
-
-    if not path.endswith(".png"):
-        abort(404)
-
-    return send_from_directory("../temp_files/", path)
 
 
 
@@ -214,9 +203,10 @@ def send_static(path):
 def final_yes():
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
-    engagement_token = r.get(f"gettoken_{user_id}").decode('ascii')
+    engagement_token = r.get(f"gettoken_{user_id}")
     my_name  = f"{received['first name'][0]} {received['last name'][0]}"
     partner_name = get_my_partner_name(user_id)
+    print(f"user_id {user_id},  engagement_token {engagement_token}, my_name {my_name}, partner_name {partner_name} ")
     store_to_blockchain(engagement_token, name_a=my_name, name_b=partner_name)
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
