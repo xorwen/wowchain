@@ -24,10 +24,11 @@ blocks = {
 def store_to_blockchain(token, name_a, name_b):
     contract_id = token
     out = f'./assets/{contract_id}-'
+    print(token)
     command = [
         "python3", "run_blockchain.py",
         name_a, name_b,
-        token.decode('ascii')
+        token
     ]
     subprocess.Popen(command)
 
