@@ -16,7 +16,9 @@ r = redis.Redis(host='localhost', port=6379, db=0)
 blocks = {
     'group_pending': '5b2f72cfe4b08d708d4d9e9c',
     'group_ready': '5b2f733de4b08d708d4edd6d',
-    'finalise_vow': '5b2f3e0ce4b08d708ce0a055'
+    'finalise_vow': '5b2f3e0ce4b08d708ce0a055',
+    'final_yes': '5b2f4316e4b08d708ce8be5a',
+    'smart_contract': ''
 }
 
 def store_to_blockchain(token, name_a, name_b):
@@ -171,12 +173,12 @@ def send_static(path):
 
 @app.route('/api/final_yes', methods=['GET'])
 def final_yes():
-    engagement_token = 'WWW'
-    user_name = 'AAA'
-    partner_name = 'BBB'
-    store_to_blockchain(engagement_token, name_a=user_name, name_b=partner_name)
-
-
+    received = request.args.to_dict(flat=False)
+    user_id = received['chatfuel user id'][0]
+    engagement_token = r.get(f"gettoken_{user_id}").decode('ascii')
+    my_name  = f"{received['first name'][0]} {received['last name'][0]}"
+    partner_name = get_my_partner_name(user_id)
+    store_to_blockchain(engagement_token, name_a=my_name, name_b=partner_name)
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
 def validate_engaging_token():
@@ -210,8 +212,8 @@ def validate_engaging_token():
         r.set(f'gettoken_{partner_id}', engaging_token)
         r.set(f'gettoken_{user_id}', engaging_token)
 
-        async_broadcast(partner_id, f"Prave jsi byl zasoubeny s {user_name}", 'group_ready')
-        async_broadcast(user_id, f"Prave jsi byl zasoubeny s {get_my_partner_name(user_id)}", 'group_ready')
+        async_broadcast(partner_id, f"You have just been engaged with {user_name}", 'group_ready')
+        async_broadcast(user_id, f"You have just been engaged with {get_my_partner_name(user_id)}", 'group_ready')
     else:
         response = {
             "set_attributes":
