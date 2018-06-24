@@ -103,7 +103,7 @@ class CreateContract(object):
 
         tx = Transaction(
             nonce=self.web3.eth.getTransactionCount(self.system_account.address),
-            gasprice=w3.toWei('21', 'gwei'),
+            gasprice=w3.toWei('100', 'gwei'),
             startgas=90000,
             to=account.address,
             value=amount,
@@ -125,7 +125,7 @@ class CreateContract(object):
             'from': self.system_account.address,
             'nonce': self.web3.eth.getTransactionCount(self.system_account.address),
             'gas': 503116,
-            'gasPrice': w3.toWei('21', 'gwei')}
+            'gasPrice': w3.toWei('100', 'gwei')}
         )
 
         print("Signing transaction")
@@ -152,7 +152,7 @@ class CreateContract(object):
             'from': self.system_account.address,
             'nonce': self.web3.eth.getTransactionCount(self.system_account.address),
             'gas': 503116,
-            'gasPrice': w3.toWei('21', 'gwei')}
+            'gasPrice': w3.toWei('100', 'gwei')}
         )
 
         transaction = self.system_account.signTransaction(transaction)
