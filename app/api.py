@@ -104,12 +104,12 @@ def calculate_agreement(agr_a, agr_b):
 
     for k in binary_keys:
         if agr_a.get(k) == 'I do' and agr_b.get(k) == 'I do':
-            agr_c = "I don't"
+            agr_c[k] = "I don't"
         else:
-            agr_c = "I don't"
+            agr_c[k] = "I don't"
 
     agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999)))
-
+    print(agr_c)
     return agr_c
 
 @app.route('/api/load_aggrements_params', methods=['GET'])
