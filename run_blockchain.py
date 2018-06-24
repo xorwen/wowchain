@@ -1,5 +1,8 @@
 import json
 import sys
+
+import requests
+
 from blockchain.create_contract.create import CreateContract
 from contract_generator.cert import CertGenerator
 from contract_generator.power_of import PowerOfGenerator
@@ -9,8 +12,6 @@ import json
 eng_token = sys.argv[3]
 
 print("Eng token ", eng_token)
-
-
 
 redis_db = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -67,3 +68,10 @@ if duration != 0:
 
 generator.add_contract_id(tx_id)
 generator.save()
+
+print("Executing callback")
+
+cll = requests.get("http://localhost:5000/api/eth_callback/" + eng_token)
+print("Status code ", cll.status_code)
+
+
