@@ -3,7 +3,7 @@ import redis
 import string
 import requests
 from flask import Flask, jsonify, request, send_from_directory, abort
-# import config
+import config
 import urllib.parse
 import json
 import subprocess
