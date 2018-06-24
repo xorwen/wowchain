@@ -22,7 +22,7 @@ def store_to_blockchain():
     command = [
         "python3", "run_blockchain.py",
         "./files/MarriageContract.sol", "./files/power_of.png", f"{assets}/power_of_OUT.png",
-        f"/files/Merriweather-Bold.ttf",
+        "./files/Merriweather-Bold.ttf",
         "aa", "bb",
         "./files/cert.png", f"{assets}/cert_OUT.png", f"{assets}/out.png"
     ]
