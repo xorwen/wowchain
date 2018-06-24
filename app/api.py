@@ -47,8 +47,8 @@ def broadcast(user_id, block_name, attributes=None):
     resp = requests.post(f'https://api.chatfuel.com/bots/{bot_id}/users/{user_id}/send?{param_str}')
     print(resp.json())
 
-def broadcast_agreement(agr, partner_id):
-    broadcast(partner_id, 'api_generic_message', attributes=agr)
+def broadcast_agreement(agr, user_id):
+    broadcast(user_id, 'api_generic_message', attributes=agr)
 
 def async_broadcast(user_id, message):
     subprocess.Popen(["python3", "broadcast.py", user_id, message])
@@ -101,13 +101,10 @@ def calculate_agreement(agr_a, agr_b):
      'commitment_indefinite']
 
     for k in binary_keys:
-        print(f"Comparing '{agr_a.get(k)}' with '{agr_b.get(k)}'...")
         if agr_a.get(k) == 'I do' and agr_b.get(k) == 'I do':
-            agr_c[k] = "I don't"
-            print("true")
+            agr_c[k] = "I do"
         else:
             agr_c[k] = "I don't"
-            print("false")
 
     agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999)))
     print(agr_c)
@@ -141,12 +138,14 @@ def load_aggrements_params():
         )
         print(f"Storing commitment_{engagement_token} to redis")
         r.set(f'commitment_{engagement_token}', json.dumps(agr))
-        print("Broadcasting to partner.")
-        broadcast_agreement(agr, partner_id)
 
+        print("Broadcasting both partners")
         final = {}
         for k, v in agr.items():
             final[f"conj_{k}"] = v
+
+        broadcast_agreement(final, partner_id)
+        broadcast_agreement(final, user_id)
 
         response = {
             "set_attributes": final
@@ -159,6 +158,14 @@ def load_aggrements_params():
 
     #store_to_blockchain(engagement_token, name_a=user_name, name_b=partner_name)
     return jsonify(params)
+
+@app.route('/api/final_yes', methods=['GET'])
+def final_yes():
+    engagement_token = 'WWW'
+    user_name = 'AAA'
+    partner_name = 'BBB'
+    store_to_blockchain(engagement_token, name_a=user_name, name_b=partner_name)
+
 
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
