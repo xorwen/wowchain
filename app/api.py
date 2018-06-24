@@ -27,8 +27,7 @@ def store_to_blockchain(token, name_a, name_b):
     command = [
         "python3", "run_blockchain.py",
         name_a, name_b,
-        token,
-        contract_id
+        token.decode('ascii')
     ]
     subprocess.Popen(command)
 
