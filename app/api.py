@@ -16,6 +16,18 @@ blocks = {
     'api_generic_message': '5b2e6e01e4b08d708b401776'
 }
 
+def store_to_blockchain():
+    contract_id = 'xxx'
+    assets = f'./assets/{contract_id}-'
+    command = [
+        "python3", "run_blockchain.py",
+        "./blockchain/MarriageContract.sol", "./Plna_moc.png", f"{assets}/Plna_moc_OUT.png",
+        f"Merriweather-Bold.ttf",
+        "aa", "bb",
+        "./cert.png", f"{assets}/cert_OUT.png", f"{assets}/out.png"
+    ]
+    subprocess.Popen(command)
+
 def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
@@ -46,6 +58,10 @@ def chatbot_callback():
     async_broadcast(user_id, "test broadcast message")
     return jsonify({"ok": 1})
 
+@app.route('/api/test_marrige')
+def test_marrige():
+    store_to_blockchain()
+    return jsonify({"ok": 1})
 
 @app.route('/api/generate_engaging_token', methods=['GET'])
 def gencode():
