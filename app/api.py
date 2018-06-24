@@ -16,15 +16,16 @@ blocks = {
     'api_generic_message': '5b2e6e01e4b08d708b401776'
 }
 
-def store_to_blockchain():
-    contract_id = 'xxx'
+def store_to_blockchain(token, name_a, name_b):
+    contract_id = token
     out = f'./assets/{contract_id}-'
     command = [
         "python3", "run_blockchain.py",
         "./files/MarriageContract.sol", "./files/power_of.png", f"{out}power_of_OUT.png",
         "./files/Merriweather-Bold.ttf",
-        "aa", "bb",
-        "./files/cert.png", f"{out}cert_OUT.png", f"{out}out.png"
+        name_a, name_b,
+        "./files/cert.png", f"{out}cert_OUT.png", f"{out}out.png",
+        contract_id
     ]
     subprocess.Popen(command)
 
@@ -91,6 +92,29 @@ def get_my_partner_name(my_id):
     return partner_name
 
 
+@app.route('/api/get_final_yes', methods=['GET'])
+def load_aggrements_params():
+    print("Received message", request.args)
+    received = request.args.to_dict(flat=False)
+    user_id = received['chatfuel user id'][0]
+    engagement_token = r.get(user_id)
+    print(f"engagement_token: {engagement_token}")
+
+    params = {}
+    keys = ['xx', 'yy']
+    for key in keys:
+        if key in received:
+            params[key] = received[key][0]
+
+    print(params)
+
+    partner_name = get_my_partner_name(user_id)
+    user_name = f"{received['first name'][0]} {received['last name'][0]}"
+
+    print("Storing to blockchain")
+    store_to_blockchain(engagement_token, name_a=user_name, name_b=partner_name)
+    return jsonify(params)
+
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
 def validate_engaging_token():
@@ -120,6 +144,8 @@ def validate_engaging_token():
         r.set(f'engaged_{engaging_token}', f"{partner_id}-{user_id}")
         r.set(f'partner_{partner_id}', user_id)
         r.set(f'partner_{user_id}', partner_id)
+        r.set(f'gettoken_{partner_id}', engaging_token)
+        r.set(f'gettoken_{user_id}', engaging_token)
 
         async_broadcast(partner_id, f"Prave jsi byl zasoubeny s {user_name}")
         async_broadcast(user_id, f"Prave jsi byl zasoubeny s {get_my_partner_name(user_id)}")
