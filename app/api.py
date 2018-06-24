@@ -2,8 +2,8 @@ import random
 import redis
 import string
 import requests
-from flask import Flask, jsonify, request
-import config
+from flask import Flask, jsonify, request, send_from_directory, abort
+# import config
 import urllib.parse
 import json
 import subprocess
@@ -158,6 +158,16 @@ def load_aggrements_params():
 
     #store_to_blockchain(engagement_token, name_a=user_name, name_b=partner_name)
     return jsonify(params)
+
+@app.route('/static_file/<path:path>')
+def send_static(path):
+    print("Sending static file ", path)
+
+    if not path.endswith(".png"):
+        abort(404)
+
+    return send_from_directory("../temp_files/", path)
+
 
 @app.route('/api/final_yes', methods=['GET'])
 def final_yes():
