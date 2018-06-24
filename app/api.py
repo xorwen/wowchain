@@ -117,7 +117,7 @@ def load_aggrements_params():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
-    engagement_token = r.get(user_id)
+    engagement_token = r.get(f"gettoken_{user_id}")
     partner_id = r.get(f"partner_{user_id}").decode('ascii')
     print(f"engagement_token: {engagement_token}")
 
@@ -137,7 +137,7 @@ def load_aggrements_params():
             pickle.loads(r.get(f'commitment_{user_id}>{partner_id}')),
             pickle.loads(r.get(f'commitment_{partner_id}>{user_id}'))
         )
-        print("Storing commitment_{engagement_token} to redis")
+        print(f"Storing commitment_{engagement_token} to redis")
         r.set(f'commitment_{engagement_token}', json.dumps(agr))
         print("Broadcasting to partner.")
         broadcast_agreement(agr, partner_id)
