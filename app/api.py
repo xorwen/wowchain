@@ -283,3 +283,62 @@ def validate_engaging_token():
     print(json.dumps(response))
 
     return jsonify(response)
+
+@app.route('/api/get_documents', methods=['GET'])
+def get_documents():
+    print("Received message", request.args)
+    received = request.args.to_dict(flat=False)
+    engaging_token = received['engaging_token'][0]
+
+
+    certificate_url = f"http://46.101.117.31:5000/static_file/cert_{engaging_token}.png"
+    power_a_url = f"http://46.101.117.31:5000/static_file/power_of_a_{engaging_token}.png"
+    power_b_url = f"http://46.101.117.31:5000/static_file/power_of_b_{engaging_token}.png"
+
+
+
+    resp = {
+     "messages": [
+        {
+          "attachment":{
+            "type":"template",
+            "payload":{
+              "template_type":"generic",
+              "image_aspect_ratio": "square",
+              "elements":[
+                {
+                  "title":"Certificate",
+                  "image_url": certificate_url,
+                  "subtitle":"Your ETH certificate",
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url": certificate_url,
+                      "title":"View Item"
+                    }
+                  ]
+                },
+                {
+                  "title":"Power of attorney",
+                  "image_url": power_a_url,
+                  "subtitle": "To print and sign up",
+                  "default_action": {
+                    "type": "web_url",
+                    "url": power_a_url
+                  },
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url":power_a_url,
+                      "title":"View Item"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+
+    return jsonify(resp)
