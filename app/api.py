@@ -88,8 +88,11 @@ def eth_callback(eng_key):
 
     user_a, user_b = str(r.get("engaged_"+eng_key).decode('ascii')).split("-")
 
+    time.sleep(1)
     async_broadcast(user_a, "", 'smart_contract')
+    time.sleep(1)
     async_broadcast(user_b, "", 'smart_contract')
+    time.sleep(1)
 
     return jsonify(json_data)
 
