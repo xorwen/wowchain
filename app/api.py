@@ -297,7 +297,7 @@ def get_documents():
     power_a_url = f"http://46.101.117.31{port}/static_file/power_of_a_{engaging_token}{ext}"
     power_b_url = f"http://46.101.117.31{port}/static_file/power_of_b_{engaging_token}{ext}"
 
-    certificate_url = f"http://46.101.117.31{port}/static_file/aa.jpg"
+    certificate_url = f"http://46.101.117.31{port}/static_file/bb.png"
     power_a_url = f"http://46.101.117.31{port}/static_file/bb.png"
     power_b_url = f"http://46.101.117.31{port}/static_file/cc.png"
 
