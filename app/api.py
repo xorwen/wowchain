@@ -291,6 +291,7 @@ def get_documents():
     engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
     print(f"engtoken: {engaging_token}")
     port = ":5001"
+    engaging_token = '2HU0M9'
 
     certificate_url = f"http://46.101.117.31{port}/static_file/cert_{engaging_token}{ext}"
     power_a_url = f"http://46.101.117.31{port}/static_file/power_of_a_{engaging_token}{ext}"
