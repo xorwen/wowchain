@@ -118,8 +118,11 @@ def gencode():
     return jsonify(response)
 
 def get_my_partner_name(my_id):
+    print(f"Getting from redis partner id: partner_{my_id}")
     partner_id = r.get(f"partner_{my_id}")
+    print(f"Getting from redis partner name: username_{partner_id}")
     partner_name = r.get(f"username_{partner_id}")
+    print("Got", partner_name)
     return partner_name
 
 
@@ -206,7 +209,7 @@ def final_yes():
     engagement_token = str(r.get(f"gettoken_{user_id}"))[2:-1]
     my_name  = f"{received['first name'][0]} {received['last name'][0]}"
     partner_name = get_my_partner_name(user_id)
-    print(partner_name)
+    print("partner name:", partner_name)
     if not partner_name:
         partner_name = "Pavel"
     print(f"user_id {user_id},  engagement_token {engagement_token}, my_name {my_name}, partner_name {partner_name} ")
