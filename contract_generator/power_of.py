@@ -22,11 +22,11 @@ class PowerOfGenerator(object):
 
         draw = ImageDraw.Draw(im1)
 
-        draw.text((200, 850), name_top, self.font_color, font=self.font)
-        draw.text((1250, 850), name_top, self.font_color, font=self.font)
+        draw.text((200, 850), name_top, (136, 65, 156), font=self.font)
+        draw.text((1250, 850), name_top, (61, 209, 212), font=self.font)
 
-        draw.text((200, 1500), name_bottom, self.font_color, font=self.font)
-        draw.text((1250, 1500), name_bottom, self.font_color, font=self.font)
+        draw.text((200, 1500), name_bottom, (61, 209, 212), font=self.font)
+        draw.text((1250, 1500), name_bottom, (136, 65, 156), font=self.font)
 
         im1.save(self.image_file_out)
 
