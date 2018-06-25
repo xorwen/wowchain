@@ -1,3 +1,4 @@
 secret_keys
 .idea
 temp_files/*
+config.py
