@@ -287,12 +287,14 @@ def get_documents():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
+    ext = received['extension'][0]
     engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
     print(f"engtoken: {engaging_token}")
+    port = ":5001"
 
-    certificate_url = f"http://46.101.117.31/static_file/cert_{engaging_token}.png"
-    power_a_url = f"http://46.101.117.31/static_file/power_of_a_{engaging_token}.png"
-    power_b_url = f"http://46.101.117.31/static_file/power_of_b_{engaging_token}.png"
+    certificate_url = f"http://46.101.117.31{port}/static_file/cert_{engaging_token}{ext}"
+    power_a_url = f"http://46.101.117.31{port}/static_file/power_of_a_{engaging_token}{ext}"
+    power_b_url = f"http://46.101.117.31{port}/static_file/power_of_b_{engaging_token}{ext}"
 
 
     print(f"""
