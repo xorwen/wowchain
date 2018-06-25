@@ -124,8 +124,6 @@ def get_my_partner_name(my_id):
         partner_id = partner_id.decode('ascii')
     print(f"Getting from redis partner name: username_{partner_id}")
     partner_name = r.get(f"username_{partner_id}")
-    if partner_name:
-        partner_name = partner_name.decode('ascii')
     print("Got", partner_name)
     return partner_name
 
