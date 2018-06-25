@@ -182,7 +182,9 @@ def load_aggrements_params():
             final[f"conj_{k}"] = v
 
         broadcast(user_id, 'finalise_vow', attributes=final)
+        time.sleep(1)
         broadcast(partner_id, 'finalise_vow', attributes=final)
+        time.sleep(1)
 
         response = {
             "set_attributes": final
