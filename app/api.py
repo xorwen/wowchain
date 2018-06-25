@@ -109,8 +109,11 @@ def eth_callback(eng_key):
 
     user_a, user_b = str(r.get("engaged_"+eng_key).decode('ascii')).split("-")
 
+    time.sleep(1)
     async_broadcast(user_a, "", 'smart_contract')
+    time.sleep(1)
     async_broadcast(user_b, "", 'smart_contract')
+    time.sleep(1)
 
     return jsonify(json_data)
 
@@ -139,8 +142,13 @@ def gencode():
     return jsonify(response)
 
 def get_my_partner_name(my_id):
+    print(f"Getting from redis partner id: partner_{my_id}")
     partner_id = r.get(f"partner_{my_id}")
+    if partner_id:
+        partner_id = partner_id.decode('ascii')
+    print(f"Getting from redis partner name: username_{partner_id}")
     partner_name = r.get(f"username_{partner_id}")
+    print("Got", partner_name)
     return partner_name
 
 
@@ -156,7 +164,14 @@ def calculate_agreement(agr_a, agr_b):
         else:
             agr_c[k] = "I don't"
 
-    agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999)))
+    a_duration = int(agr_a['commitment_duration']) if agr_a.get('commitment_duration','').isnumeric() else None
+    b_duration = int(agr_b['commitment_duration']) if agr_b.get('commitment_duration', '').isnumeric() else None
+
+    if a_duration or b_duration:
+        agr_c['commitment_duration'] = min(a_duration, b_duration)
+    else:
+        agr_c['commitment_duration'] = 'indefinite'
+
     print(agr_c)
     return agr_c
 
@@ -195,7 +210,9 @@ def load_aggrements_params():
             final[f"conj_{k}"] = v
 
         broadcast(user_id, 'finalise_vow', attributes=final)
+        time.sleep(1)
         broadcast(partner_id, 'finalise_vow', attributes=final)
+        time.sleep(1)
 
         response = {
             "set_attributes": final
@@ -223,13 +240,22 @@ def send_static(path):
 def final_yes():
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0] # b'MSHM8W'
+    print(f"Received user_id {user_id}")
     engagement_token = str(r.get(f"gettoken_{user_id}"))[2:-1]
     my_name  = f"{received['first name'][0]} {received['last name'][0]}"
     partner_name = get_my_partner_name(user_id)
+    print("partner name:", partner_name)
     if not partner_name:
         partner_name = "Pavel"
     print(f"user_id {user_id},  engagement_token {engagement_token}, my_name {my_name}, partner_name {partner_name} ")
     store_to_blockchain(engagement_token, name_a=my_name, name_b=partner_name)
+
+    return jsonify({
+        "set_attributes":
+            {
+                "blockchain_recored_started": "true"
+            }
+    })
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
 def validate_engaging_token():
@@ -278,3 +304,77 @@ def validate_engaging_token():
     print(json.dumps(response))
 
     return jsonify(response)
+
+@app.route('/api/get_documents', methods=['GET'])
+def get_documents():
+    print("Received message", request.args)
+    received = request.args.to_dict(flat=False)
+    user_id = received['chatfuel user id'][0]
+    engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
+    print(f"engtoken: {engaging_token}")
+
+    certificate_url = f"http://46.101.117.31:5000/static_file/cert_{engaging_token}.png"
+    power_a_url = f"http://46.101.117.31:5000/static_file/power_of_a_{engaging_token}.png"
+    power_b_url = f"http://46.101.117.31:5000/static_file/power_of_b_{engaging_token}.png"
+
+    resp = {
+     "messages": [
+        {
+          "attachment":{
+            "type":"template",
+            "payload":{
+              "template_type":"generic",
+              "image_aspect_ratio": "square",
+              "elements":[
+                {
+                  "title":"Certificate",
+                  "image_url": certificate_url,
+                  "subtitle":"Your ETH certificate",
+                  "buttons":[
+                    {
+                      "type":"web_url",
+                      "url": certificate_url,
+                      "title":"View Item"
+                    }
+                  ]
+                },
+                    {
+                      "title":"Power of attorney (A)",
+                      "image_url": power_a_url,
+                      "subtitle": "To print and sign up",
+                      "default_action": {
+                        "type": "web_url",
+                        "url": power_a_url
+                      },
+                      "buttons":[
+                        {
+                          "type":"web_url",
+                          "url":power_a_url,
+                          "title":"View Item"
+                        }
+                      ]
+                    },
+                    {
+                      "title": "Power of attorney (B)",
+                      "image_url": power_b_url,
+                      "subtitle": "To print and sign up",
+                      "default_action": {
+                          "type": "web_url",
+                          "url": power_b_url
+                      },
+                      "buttons": [
+                          {
+                              "type": "web_url",
+                              "url": power_b_url,
+                              "title": "View Item"
+                          }
+                      ]
+                    }
+              ]
+            }
+          }
+        }
+      ]
+    }
+
+    return jsonify(resp)
