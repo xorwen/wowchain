@@ -9,6 +9,7 @@ import json
 import subprocess
 import time
 import pickle
+from flask_cors import cross_origin
 
 
 import sys
@@ -78,6 +79,7 @@ def test_marrige():
 
 
 @app.route('/api/contract_state/<contract_id>')
+@cross_origin()
 def eth_cotract_state(contract_id):
 
     contract_creator = CreateContract("../files/MarriageContract.sol")
