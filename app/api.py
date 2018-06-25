@@ -120,8 +120,12 @@ def gencode():
 def get_my_partner_name(my_id):
     print(f"Getting from redis partner id: partner_{my_id}")
     partner_id = r.get(f"partner_{my_id}")
+    if partner_id:
+        partner_id = partner_id.decode('asciii')
     print(f"Getting from redis partner name: username_{partner_id}")
     partner_name = r.get(f"username_{partner_id}")
+    if partner_name:
+        partner_name = partner_name.decode('ascii')
     print("Got", partner_name)
     return partner_name
 
