@@ -296,6 +296,12 @@ def get_documents():
     power_a_url = f"http://46.101.117.31:5000/static_file/power_of_a_{engaging_token}.png"
     power_b_url = f"http://46.101.117.31:5000/static_file/power_of_b_{engaging_token}.png"
 
+
+    certificate_url = f"http://i0.kym-cdn.com/photos/images/original/001/263/439/f12.jpg"
+    power_a_url = f"https://orig00.deviantart.net/0596/f/2012/108/3/6/png_de_anime_by_chicaanime01-d4wm4vd.png"
+    power_b_url = f"https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/0/03/Uber-kittens.png/revision/latest?cb=20161023133316"
+
+
     print(f"""
     cert {certificate_url}
     powA {power_a_url}
