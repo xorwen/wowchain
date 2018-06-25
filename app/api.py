@@ -296,6 +296,12 @@ def get_documents():
     power_a_url = f"http://46.101.117.31:5000/static_file/power_of_a_{engaging_token}.png"
     power_b_url = f"http://46.101.117.31:5000/static_file/power_of_b_{engaging_token}.png"
 
+    print(f"""
+    cert {certificate_url}
+    powA {power_a_url}
+    powB {power_b_url}
+    """)
+
     resp = {
      "messages": [
         {
