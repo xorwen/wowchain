@@ -311,17 +311,22 @@ def get_documents():
     ext = received['extension'][0]
     engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
     print(f"engtoken: {engaging_token}")
-    port = ":5001"
+    port = ""
     engaging_token = '2HU0M9'
 
-    certificate_url = f"http://46.101.117.31{port}/static_file/cert_{engaging_token}{ext}"
+    certificate_url = f"http://46.101.117.31{port}/static_file/aa."
     power_a_url = f"http://46.101.117.31{port}/static_file/power_of_a_{engaging_token}{ext}"
     power_b_url = f"http://46.101.117.31{port}/static_file/power_of_b_{engaging_token}{ext}"
 
+    certificate_url = f"http://46.101.117.31{port}/static_file/aa.jpg"
+    power_a_url = f"http://46.101.117.31{port}/static_file/bb.png"
+    power_b_url = f"http://46.101.117.31{port}/static_file/cc.png"
+
+    """
     certificate_url = 'http://i0.kym-cdn.com/photos/images/original/001/263/439/f12.jpg'
     power_a_url = 'https://vignette.wikia.nocookie.net/animal-jam-clans-1/images/0/03/Uber-kittens.png/revision/latest?cb=20161023133316'
     power_b_url = 'https://orig00.deviantart.net/0596/f/2012/108/3/6/png_de_anime_by_chicaanime01-d4wm4vd.png'
-
+    """
 
     print(f"""
     cert {certificate_url}
