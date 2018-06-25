@@ -102,9 +102,9 @@ def eth_callback(eng_key):
     print("Broadcasting eth_callback to ", user_a, user_b)
 
     attrs = {
-        'certificate_url': f"http://46.101.117.31/static_file/cert_{eng_key}.png",
-        'power_a_url': f"http://46.101.117.31/static_file/power_of_a_{eng_key}.png",
-        'power_b_url' : f"http://46.101.117.31/static_file/power_of_b_{eng_key}.png",
+        'certificate_url': f"http://46.101.117.31:5000/static_file/cert_{eng_key}.png",
+        'power_a_url': f"http://46.101.117.31:5000/static_file/power_of_a_{eng_key}.png",
+        'power_b_url' : f"http://46.101.117.31:5000/static_file/power_of_b_{eng_key}.png",
     }
 
     time.sleep(1)
