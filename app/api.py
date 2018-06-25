@@ -202,13 +202,22 @@ def send_static(path):
 def final_yes():
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0] # b'MSHM8W'
+    print(f"Received user_id {user_id}")
     engagement_token = str(r.get(f"gettoken_{user_id}"))[2:-1]
     my_name  = f"{received['first name'][0]} {received['last name'][0]}"
     partner_name = get_my_partner_name(user_id)
+    print(partner_name)
     if not partner_name:
         partner_name = "Pavel"
     print(f"user_id {user_id},  engagement_token {engagement_token}, my_name {my_name}, partner_name {partner_name} ")
     store_to_blockchain(engagement_token, name_a=my_name, name_b=partner_name)
+
+    return jsonify({
+        "set_attributes":
+            {
+                "blockchain_recored_started": "true"
+            }
+    })
 
 @app.route('/api/validate_engaging_token', methods=['GET'])
 def validate_engaging_token():
