@@ -294,6 +294,7 @@ def get_documents():
     engaging_token = '2HU0M9'
 
     certificate_url = f"http://46.101.117.31{port}/static_file/cert_{engaging_token}{ext}"
+    certificate_url = 'http://i0.kym-cdn.com/photos/images/original/001/263/439/f12.jpg'
     power_a_url = f"http://46.101.117.31{port}/static_file/power_of_a_{engaging_token}{ext}"
     power_b_url = f"http://46.101.117.31{port}/static_file/power_of_b_{engaging_token}{ext}"
 
