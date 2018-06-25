@@ -288,8 +288,9 @@ def validate_engaging_token():
 def get_documents():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
-    engaging_token = received['engaging_token'][0]
-
+    user_id = received['chatfuel user id'][0]
+    engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
+    print(f"engtoken: {engaging_token}")
 
     certificate_url = f"http://46.101.117.31:5000/static_file/cert_{engaging_token}.png"
     power_a_url = f"http://46.101.117.31:5000/static_file/power_of_a_{engaging_token}.png"
