@@ -143,7 +143,14 @@ def calculate_agreement(agr_a, agr_b):
         else:
             agr_c[k] = "I don't"
 
-    agr_c['commitment_duration'] = min(int(agr_a.get('commitment_duration', 999)), int(agr_b.get('commitment_duration', 999)))
+    a_duration = int(agr_a['commitment_duration']) if agr_a.get('commitment_duration','').isnumeric() else None
+    b_duration = int(agr_b['commitment_duration']) if agr_b.get('commitment_duration', '').isnumeric() else None
+
+    if a_duration or b_duration:
+        agr_c['commitment_duration'] = min(a_duration, b_duration)
+    else:
+        agr_c['commitment_duration'] = 'indefinite'
+
     print(agr_c)
     return agr_c
 
