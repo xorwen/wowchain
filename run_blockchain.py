@@ -34,12 +34,21 @@ template_settings = {
 }
 
 
+print(json.dumps(template_settings), file=open("./temp_files/template_settings_"+eng_token+".json", "w"))
+print("Contract settings saved to  ", "./temp_files/template_settings"+eng_token+".json")
+
+
 # print(template_settings)
 # print(json.dumps(template_settings))
 
 contract_creator = CreateContract("./files/MarriageContract.sol", template_settings)
 
 tx_id = contract_creator.deploy_contract()
+
+compiled_sol, source_code = contract_creator.compile_source_file("./files/MarriageContract.sol")
+print(source_code, file=open("./temp_files/contract_source_"+tx_id+".txt", "w"))
+
+print("Contract source saved to ", "./temp_files/contract_source_"+tx_id+".txt")
 
 account_a, account_a_pw = contract_creator.gen_account()
 contract_creator.add_spouse(tx_id, account_a.address)

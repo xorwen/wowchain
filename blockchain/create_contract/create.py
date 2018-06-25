@@ -26,10 +26,12 @@ class CreateContract(object):
         "support_each_other": ["bool", "true"],
     }
 
-    def __init__(self, contract_file_path, template_settings):
+    def __init__(self, contract_file_path, template_settings=None):
 
-        compiled_sol = self.compile_source_file(contract_file_path)
-        self.template_settings = template_settings
+        compiled_sol, source_code = self.compile_source_file(contract_file_path)
+
+        if template_settings is not None:
+            self.template_settings = template_settings
 
         contract_interface = compiled_sol[list(compiled_sol.keys())[0]]
 
@@ -52,7 +54,7 @@ class CreateContract(object):
         print(source)
         print()
 
-        return compile_source(source)
+        return compile_source(source), source
 
     def gen_account_password(self):
 
@@ -143,6 +145,12 @@ class CreateContract(object):
         print("Contract ID ", str(transaction_id["contractAddress"]))
 
         return transaction_id["contractAddress"]
+
+    def get_contract_caller(self, contract_id):
+
+        caller = self.prepared_contract(contract_id).call()
+
+        return caller
 
     def add_spouse(self, contract_id, spouse_address):
 

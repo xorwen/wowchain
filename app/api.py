@@ -10,6 +10,12 @@ import subprocess
 import time
 import pickle
 
+
+import sys
+sys.path.append('..')
+
+from blockchain.create_contract.create import CreateContract
+
 app = Flask(__name__)
 
 r = redis.Redis(host='localhost', port=6379, db=0)
@@ -71,6 +77,21 @@ def test_marrige():
     return jsonify({"ok": 1})
 
 
+@app.route('/api/contract_state/<contract_id>')
+def eth_cotract_state(contract_id):
+
+    contract_creator = CreateContract("../files/MarriageContract.sol")
+
+    caller = contract_creator.get_contract_caller(contract_id)
+
+    contract_values = {
+        "share_medical_records": caller.share_medical_records(),
+        "sexual_fidelity": caller.sexual_fidelity(),
+        "relationship_duration_months": caller.relationship_duration_months(),
+        "support_each_other": caller.support_each_other(),
+    }
+
+    return jsonify(contract_values)
 
 @app.route('/api/eth_callback/<eng_key>')
 def eth_callback(eng_key):
