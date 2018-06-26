@@ -25,7 +25,8 @@ blocks = {
     'group_ready': '5b2f733de4b08d708d4edd6d',
     'finalise_vow': '5b2f3e0ce4b08d708ce0a055',
     'final_yes': '5b2f4316e4b08d708ce8be5a',
-    'contract_created': '5b2f79f7e4b08d708d5da209'
+    'contract_created': '5b2f79f7e4b08d708d5da209',
+    'get_documents': '5b30d9c5e4b08507221cc383'
 }
 
 def store_to_blockchain(token, name_a, name_b):
@@ -101,16 +102,10 @@ def eth_callback(eng_key):
     user_a, user_b = str(r.get("engaged_"+eng_key).decode('ascii')).split("-")
     print("Broadcasting eth_callback to ", user_a, user_b)
 
-    attrs = {
-        'certificate_url': f"http://46.101.117.31:5000/static_file/cert_{eng_key}.png",
-        'power_a_url': f"http://46.101.117.31:5000/static_file/power_of_a_{eng_key}.png",
-        'power_b_url' : f"http://46.101.117.31:5000/static_file/power_of_b_{eng_key}.png",
-    }
-
     time.sleep(1)
-    broadcast(user_a,  'contract_created', attributes=attrs)
+    broadcast(user_a,  'get_documents')
     time.sleep(1)
-    broadcast(user_b, 'contract_created', attributes=attrs)
+    broadcast(user_b, 'get_documents')
     time.sleep(1)
 
     return jsonify({})
