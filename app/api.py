@@ -316,12 +316,8 @@ def get_documents():
     engaging_token = '2HU0M9'
 
     certificate_url = f"http://{domain}{port}/static_file/aa."
-    power_a_url = f"http://{domain}{port}/static_file/power_of_a_{engaging_token}{ext}"
-    power_b_url = f"http://{domain}{port}/static_file/power_of_b_{engaging_token}{ext}"
-
-    certificate_url = f"http://{domain}{port}/static_file/bb.png"
-    power_a_url = f"http://{domain}{port}/static_file/bb.png"
-    power_b_url = f"http://{domain}{port}/static_file/cc.png"
+    power_a_url = f"http://{domain}{port}/static_file/power_of_a_{engaging_token}"
+    power_b_url = f"http://{domain}{port}/static_file/power_of_b_{engaging_token}"
 
     print(f"""
     cert {certificate_url}
@@ -340,44 +336,44 @@ def get_documents():
               "elements":[
                 {
                   "title":"Certificate",
-                  "image_url": certificate_url,
+                  "image_url": f"{certificate_url}.png",
                   "subtitle":"Your ETH certificate",
                   "buttons":[
                     {
                       "type":"web_url",
-                      "url": certificate_url,
+                      "url": f"{certificate_url}.png",
                       "title":"View Item"
                     }
                   ]
                 },
                     {
                       "title":"Power of attorney (A)",
-                      "image_url": power_a_url,
+                      "image_url": f"{power_a_url}.png",
                       "subtitle": "To print and sign up",
                       "default_action": {
                         "type": "web_url",
-                        "url": power_a_url
+                        "url": f"{power_a_url}.png"
                       },
                       "buttons":[
                         {
                           "type":"web_url",
-                          "url":power_a_url,
+                          "url":f"{power_a_url}.png",
                           "title":"View Item"
                         }
                       ]
                     },
                     {
                       "title": "Power of attorney (B)",
-                      "image_url": power_b_url,
+                      "image_url": f"{power_b_url}.png",
                       "subtitle": "To print and sign up",
                       "default_action": {
                           "type": "web_url",
-                          "url": power_b_url
+                          "url": f"{power_b_url}.png"
                       },
                       "buttons": [
                           {
                               "type": "web_url",
-                              "url": power_b_url,
+                              "url": f"{power_b_url}.png",
                               "title": "View Item"
                           }
                       ]
