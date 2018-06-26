@@ -25,7 +25,7 @@ blocks = {
     'group_ready': '5b2f733de4b08d708d4edd6d',
     'finalise_vow': '5b2f3e0ce4b08d708ce0a055',
     'final_yes': '5b2f4316e4b08d708ce8be5a',
-    'smart_contract': '5b2f79f7e4b08d708d5da209'
+    'contract_created': '5b2f79f7e4b08d708d5da209'
 }
 
 def store_to_blockchain(token, name_a, name_b):
@@ -98,24 +98,22 @@ def eth_callback(eng_key):
 
     print("ETH callback ", eng_key)
 
-    json_data = {
-        "eng_key": eng_key,
-        "images": [
-            "http://46.101.117.31:5000/static_file/cert_" + eng_key + ".png",
-            "http://46.101.117.31:5000/static_file/power_of_a_" + eng_key + ".png",
-            "http://46.101.117.31:5000/static_file/power_of_b_" + eng_key + ".png",
-        ]
+    user_a, user_b = str(r.get("engaged_"+eng_key).decode('ascii')).split("-")
+    print("Broadcasting eth_callback to ", user_a, user_b)
+
+    attrs = {
+        'certificate_url': f"http://46.101.117.31:5000/static_file/cert_{eng_key}.png",
+        'power_a_url': f"http://46.101.117.31:5000/static_file/power_of_a_{eng_key}.png",
+        'power_b_url' : f"http://46.101.117.31:5000/static_file/power_of_b_{eng_key}.png",
     }
 
-    user_a, user_b = str(r.get("engaged_"+eng_key).decode('ascii')).split("-")
-
     time.sleep(1)
-    async_broadcast(user_a, "", 'smart_contract')
+    broadcast(user_a,  'contract_created', attributes=attrs)
     time.sleep(1)
-    async_broadcast(user_b, "", 'smart_contract')
+    broadcast(user_b, 'contract_created', attributes=attrs)
     time.sleep(1)
 
-    return jsonify(json_data)
+    return jsonify({})
 
 
 
@@ -310,12 +308,21 @@ def get_documents():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
+    ext = received['extension'][0]
     engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
     print(f"engtoken: {engaging_token}")
+    domain = 'plants.id' # 46.101.117.31
+    port = ""
 
-    certificate_url = f"http://46.101.117.31:5000/static_file/cert_{engaging_token}.png"
-    power_a_url = f"http://46.101.117.31:5000/static_file/power_of_a_{engaging_token}.png"
-    power_b_url = f"http://46.101.117.31:5000/static_file/power_of_b_{engaging_token}.png"
+    certificate_url = f"http://{domain}{port}/static_file/cert_{engaging_token}"
+    power_a_url = f"http://{domain}{port}/static_file/power_of_a_{engaging_token}"
+    power_b_url = f"http://{domain}{port}/static_file/power_of_b_{engaging_token}"
+
+    print(f"""
+    cert {certificate_url}
+    powA {power_a_url}
+    powB {power_b_url}
+    """)
 
     resp = {
      "messages": [
@@ -328,44 +335,44 @@ def get_documents():
               "elements":[
                 {
                   "title":"Certificate",
-                  "image_url": certificate_url,
+                  "image_url": f"{certificate_url}.png",
                   "subtitle":"Your ETH certificate",
                   "buttons":[
                     {
                       "type":"web_url",
-                      "url": certificate_url,
+                      "url": f"{certificate_url}.png",
                       "title":"View Item"
                     }
                   ]
                 },
                     {
                       "title":"Power of attorney (A)",
-                      "image_url": power_a_url,
+                      "image_url": f"{power_a_url}.png",
                       "subtitle": "To print and sign up",
                       "default_action": {
                         "type": "web_url",
-                        "url": power_a_url
+                        "url": f"{power_a_url}.png"
                       },
                       "buttons":[
                         {
                           "type":"web_url",
-                          "url":power_a_url,
+                          "url":f"{power_a_url}.png",
                           "title":"View Item"
                         }
                       ]
                     },
                     {
                       "title": "Power of attorney (B)",
-                      "image_url": power_b_url,
+                      "image_url": f"{power_b_url}.png",
                       "subtitle": "To print and sign up",
                       "default_action": {
                           "type": "web_url",
-                          "url": power_b_url
+                          "url": f"{power_b_url}.png"
                       },
                       "buttons": [
                           {
                               "type": "web_url",
-                              "url": power_b_url,
+                              "url": f"{power_b_url}.png",
                               "title": "View Item"
                           }
                       ]
@@ -378,3 +385,6 @@ def get_documents():
     }
 
     return jsonify(resp)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=80)
