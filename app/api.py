@@ -315,7 +315,7 @@ def get_documents():
     port = ""
     engaging_token = '2HU0M9'
 
-    certificate_url = f"http://{domain}{port}/static_file/aa."
+    certificate_url = f"http://{domain}{port}/static_file/cert_{engaging_token}"
     power_a_url = f"http://{domain}{port}/static_file/power_of_a_{engaging_token}"
     power_b_url = f"http://{domain}{port}/static_file/power_of_b_{engaging_token}"
 
