@@ -312,7 +312,7 @@ def get_documents():
     engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
     print(f"engtoken: {engaging_token}")
     domain = 'plants.id' # 46.101.117.31
-    port = ":5001"
+    port = ""
     engaging_token = '2HU0M9'
 
     certificate_url = f"http://{domain}{port}/static_file/aa."
