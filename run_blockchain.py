@@ -78,7 +78,7 @@ generator.save()
 
 print("Executing callback")
 
-cll = requests.get("http://localhost:5000/api/eth_callback/" + eng_token)
+cll = requests.get("http://localhost/api/eth_callback/" + eng_token)
 print("Status code ", cll.status_code)
 
 
