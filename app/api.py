@@ -292,7 +292,6 @@ def get_documents():
     print(f"engtoken: {engaging_token}")
     domain = 'plants.id' # 46.101.117.31
     port = ""
-    engaging_token = '2HU0M9'
 
     certificate_url = f"http://{domain}{port}/static_file/cert_{engaging_token}"
     power_a_url = f"http://{domain}{port}/static_file/power_of_a_{engaging_token}"
