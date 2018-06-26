@@ -38,7 +38,7 @@ def store_to_blockchain(token, name_a, name_b):
         name_a, name_b,
         token
     ]
-    subprocess.Popen(command)
+    subprocess.Popen(command, cwd='..')
 
 def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
