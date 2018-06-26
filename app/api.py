@@ -34,11 +34,11 @@ def store_to_blockchain(token, name_a, name_b):
     out = f'./assets/{contract_id}-'
     print(token)
     command = [
-        "python3", "run_blockchain.py",
+        "python3", "../run_blockchain.py",
         name_a, name_b,
         token
     ]
-    subprocess.Popen(command, cwd='..')
+    subprocess.Popen(command, cwd='app')
 
 def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
