@@ -232,7 +232,7 @@ def load_aggrements_params():
 def send_static(path):
     print("Sending static file ", path)
 
-    if not path.endswith(".png"):
+    if not (path.endswith(".png") or path.endswith(".jpeg")):
         abort(404)
 
     return send_from_directory("../temp_files/", path)
