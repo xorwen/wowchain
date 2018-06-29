@@ -83,7 +83,7 @@ def test_marrige():
 @cross_origin()
 def eth_cotract_state(contract_id):
 
-    contract_creator = CreateContract("../files/MarriageContract.sol")
+    contract_creator = CreateContract("../files/MarriageContract.sol", template_settings=None)
 
     caller = contract_creator.get_contract_caller(contract_id)
 
