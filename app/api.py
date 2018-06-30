@@ -9,6 +9,7 @@ import json
 import subprocess
 import time
 import pickle
+from flask_cors import cross_origin
 
 
 import sys
@@ -34,11 +35,11 @@ def store_to_blockchain(token, name_a, name_b):
     out = f'./assets/{contract_id}-'
     print(token)
     command = [
-        "python3", "../run_blockchain.py",
+        "python3", "run_blockchain.py",
         name_a, name_b,
         token
     ]
-    subprocess.Popen(command, cwd='app')
+    subprocess.Popen(command, cwd='..')
 
 def get_random_string(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
@@ -79,9 +80,10 @@ def test_marrige():
 
 
 @app.route('/api/contract_state/<contract_id>')
+@cross_origin()
 def eth_cotract_state(contract_id):
 
-    contract_creator = CreateContract("../files/MarriageContract.sol")
+    contract_creator = CreateContract("../files/MarriageContract.sol", template_settings=None)
 
     caller = contract_creator.get_contract_caller(contract_id)
 
@@ -223,7 +225,7 @@ def load_aggrements_params():
 def send_static(path):
     print("Sending static file ", path)
 
-    if not path.endswith(".png"):
+    if not (path.endswith(".png") or path.endswith(".jpeg")):
         abort(404)
 
     return send_from_directory("../temp_files/", path)

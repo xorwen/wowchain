@@ -1,4 +1,4 @@
-
+import PIL
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
@@ -29,6 +29,19 @@ class PowerOfGenerator(object):
         draw.text((1250, 1500), name_bottom, (136, 65, 156), font=self.font)
 
         im1.save(self.image_file_out)
+
+        im1.convert('RGB').save(self.image_file_out + ".jpeg", quality=100, optimize=True, progressive=True)
+
+        im1.convert('RGB').save(self.image_file_out + ".50q.jpeg", quality=50, optimize=True, progressive=True)
+
+        im1.thumbnail([512, 512], PIL.Image.ANTIALIAS)
+
+        im1.save(self.image_file_out + ".small.png")
+
+        im1.convert('RGB').save(self.image_file_out + ".small.jpeg", quality=100, optimize=True, progressive=True)
+
+        im1.convert('RGB').save(self.image_file_out + ".small.50q.jpeg", quality=50, optimize=True, progressive=True)
+
 
 
 

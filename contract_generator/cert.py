@@ -1,4 +1,4 @@
-
+import PIL
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
@@ -46,6 +46,18 @@ class CertGenerator(object):
         print("Saving Certificate to ",self.image_file_out)
 
         self.im1.save(self.image_file_out)
+
+        self.im1.convert('RGB').save(self.image_file_out + ".jpeg")
+
+        self.im1.convert('RGB').save(self.image_file_out + ".50q.jpeg", quality=50, optimize=True, progressive=True)
+
+        self.im1.thumbnail([512, 512], PIL.Image.ANTIALIAS)
+
+        self.im1.save(self.image_file_out + ".small.png")
+
+        self.im1.convert('RGB').save(self.image_file_out + ".small.jpeg", quality=100, optimize=True, progressive=True)
+
+        self.im1.convert('RGB').save(self.image_file_out + ".small.50q.jpeg", quality=50, optimize=True, progressive=True)
 
 
 
