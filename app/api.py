@@ -303,7 +303,6 @@ def get_documents():
     print("Received message", request.args)
     received = request.args.to_dict(flat=False)
     user_id = received['chatfuel user id'][0]
-    ext = received['extension'][0]
     engaging_token = r.get(f"gettoken_{user_id}").decode('ascii')
     print(f"engtoken: {engaging_token}")
     domain = 'plants.id' # 46.101.117.31
